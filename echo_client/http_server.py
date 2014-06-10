@@ -2,7 +2,7 @@
 
 """
 A basic echo server
-Listens on a specific port and echos messages
+Listens on a specific port and returns http responses
 Shuts down when it recieves and End of Transmission message
 """
 
