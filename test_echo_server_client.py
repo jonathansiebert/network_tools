@@ -31,7 +31,7 @@ def test_long_buffer():
 
 
 def test_unicode():
-    assert echo_client(u"ẋṹẁűüƙĝčẳ".encode('utf-8')) == u"ẋṹẁűüƙĝčẳ"
+    assert echo_client(u"ẋṹẁűüƙĝčẳ") == u"ẋṹẁűüƙĝčẳ"
 
 
 def test_eof():

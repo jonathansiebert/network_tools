@@ -21,7 +21,7 @@ def echo_client(message):
                                   socket.SOCK_STREAM,
                                   socket.IPPROTO_IP)
     client_socket.connect(('127.0.0.1', 50000))
-    client_socket.sendall(bytes(message))
+    client_socket.sendall(message.encode('utf-8'))
     client_socket.shutdown(socket.SHUT_WR)
     echo_msg = ''
     msg_comp = False
@@ -31,7 +31,7 @@ def echo_client(message):
         if len(msg_part) < 128:
             msg_comp = True
     client_socket.close()
-    return echo_msg
+    return unicode(echo_msg, 'utf-8')
 
 
 if __name__ == "__main__":
