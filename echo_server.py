@@ -1,6 +1,6 @@
 """
-A basic echo server.
-Listens on a specific port and echos messages.
+A basic echo server
+Listens on a specific port and echos messages
 Shuts down when it recieves and End of Transmission message
 """
 
@@ -14,24 +14,22 @@ def server_process():
     and echo any messages recieved up to and including
     an End of Transmission
     """
-    server_socket = socket.socket(socket.AF_INET,
-                                  socket.SOCK_STREAM,
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM,
                                   socket.IPPROTO_IP)
     server_socket.bind(('127.0.0.1', 50000))
+    buff = 1024
     server_socket.listen(1)
-
-    done = False
-    while not done:
-        conn, addr = server_socket.accept()
-        echo_msg = conn.recv(128)
-
-        if echo_msg == "End of Transmission":
-            done = True
-
-        conn.sendall(echo_msg)
-        conn.close()
-
-    server_socket.close
+    conn, addr = server_socket.accept()
+    complete_msg = ""
+    completed = False
+    while not completed:
+        rcvd_msg = conn.recv(buff)
+        if len(rcvd_msg) < 1024:
+            completed = True
+            complete_msg += rcvd_msg
+    conn.sendall(complete_msg)
+    conn.close()
+    server_socket.close()
 
 
 def echo_server():
