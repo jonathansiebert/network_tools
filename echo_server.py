@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 A basic echo server
 Listens on a specific port and echos messages
@@ -14,21 +16,30 @@ def server_process():
     and echo any messages recieved up to and including
     an End of Transmission
     """
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM,
+    server_socket = socket.socket(socket.AF_INET,
+                                  socket.SOCK_STREAM,
                                   socket.IPPROTO_IP)
     server_socket.bind(('127.0.0.1', 50000))
-    buff = 1024
     server_socket.listen(1)
-    conn, addr = server_socket.accept()
-    complete_msg = ""
-    completed = False
-    while not completed:
-        rcvd_msg = conn.recv(buff)
-        if len(rcvd_msg) < 1024:
-            completed = True
-            complete_msg += rcvd_msg
-    conn.sendall(complete_msg)
-    conn.close()
+
+    done = False
+    while not done:
+        conn, addr = server_socket.accept()
+        echo_msg = ''
+
+        msg_comp = False
+        while not msg_comp:
+            msg_part = conn.recv(128)
+            echo_msg += msg_part
+            if len(msg_part) < 128:
+                msg_comp = True
+
+        if echo_msg == bytes(u"End of Transmission"):
+            done = True
+
+        conn.sendall(echo_msg)
+        conn.close()
+
     server_socket.close()
 
 

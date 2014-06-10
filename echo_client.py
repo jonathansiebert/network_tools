@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 A basic echo client
 Opens a specific socket and tries to send a message
@@ -19,11 +21,17 @@ def echo_client(message):
                                   socket.SOCK_STREAM,
                                   socket.IPPROTO_IP)
     client_socket.connect(('127.0.0.1', 50000))
-    client_socket.sendall(message)
+    client_socket.sendall(bytes(message))
     client_socket.shutdown(socket.SHUT_WR)
-    retval = client_socket.recv(128)
+    echo_msg = ''
+    msg_comp = False
+    while not msg_comp:
+        msg_part = client_socket.recv(128)
+        echo_msg += msg_part
+        if len(msg_part) < 128:
+            msg_comp = True
     client_socket.close()
-    return retval
+    return echo_msg
 
 
 if __name__ == "__main__":
