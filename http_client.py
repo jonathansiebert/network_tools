@@ -8,7 +8,7 @@ import sys
 import socket
 
 
-def http_client(message):
+def http_client_send_unaltered(message):
     """
     Do everything here!
     Open the socket, send the message passed in,

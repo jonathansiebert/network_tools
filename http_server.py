@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A basic echo server
+A basic http server
 Listens on a specific port and returns http responses
 Shuts down when it recieves and End of Transmission message
 """
@@ -13,7 +13,7 @@ from multiprocessing import Process
 def server_process():
     """
     Open a specific socket to match the client module,
-    and echo any messages recieved up to and including
+    and http any messages recieved up to and including
     an End of Transmission
     """
     server_socket = socket.socket(socket.AF_INET,
@@ -25,25 +25,25 @@ def server_process():
     done = False
     while not done:
         conn, addr = server_socket.accept()
-        echo_msg = ''
+        http_req = ''
 
-        msg_comp = False
-        while not msg_comp:
+        req_part = False
+        while not req_part:
             msg_part = conn.recv(128)
-            echo_msg += msg_part
+            http_req += msg_part
             if len(msg_part) < 128:
-                msg_comp = True
+                req_part = True
 
-        if echo_msg == bytes(u"End of Transmission"):
+        if http_req == bytes(u"End of Transmission"):
             done = True
 
-        conn.sendall(echo_msg)
+        conn.sendall(http_req)
         conn.close()
 
     server_socket.close()
 
 
-def echo_server():
+def http_server():
     """
     Returns the process that the server is running in,
     it is left to the parent process to terminate this one
@@ -58,4 +58,4 @@ if __name__ == "__main__":
     """
     We're already our own process, so go ahead and block
     """
-    echo_server().join()
+    http_server().join()
