@@ -73,5 +73,5 @@ def test_http_client_error():
         "HTTP/1.1 400 Bad Request\r\n" + \
         "Content-Type: text/plain\r\n" + \
         "\r\n" + \
-        "Error 400: No URI requested\r\n"
+        "Error 400: No Host Specified\r\n"
     assert http_client_send_unaltered(request_str) == error_str

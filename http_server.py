@@ -39,6 +39,10 @@ def server_process():
             if len(msg_part) < buf_size or '\r\n\r\n' in msg_part:
                 req_part = True
 
+        request = http_req.split()
+
+        
+
         conn.sendall(http_req)
         conn.close()
 
@@ -57,11 +61,35 @@ def http_server():
 
 
 def http_ok(uri):
+    """
+    returns a valid HTTP/1.1 response containing plain text
+    of the the uri requested as the body
+    """
     return \
         "HTTP/1.1 200 OK\r\n" + \
         "Content-Type: text/plain\r\n" + \
         "\r\n" + \
         uri + "\r\n"
+
+
+# for http_error function
+http_errors = {
+    404: "Not Found",
+    501: "Not Implemented",
+    505: "HTTP Version Not Supported",
+    400: "Bad Request"
+}
+
+
+def http_error(code, message):
+    """
+    returns a http error response appropriate for the http error code
+    with a human readable message in the response body
+    """
+    return "HTTP/1.1 " + code + http_errors[code] + "\r\n"\
+           "Content-Type: text/plain\r\n" + \
+           "\r\n" + \
+           "Error" + code + ": " + message + "\r\n"
 
 
 if __name__ == "__main__":
