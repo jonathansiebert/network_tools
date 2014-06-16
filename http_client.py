@@ -21,15 +21,27 @@ def http_client_send_unaltered(message):
     client_socket.connect(('127.0.0.1', 50000))
     client_socket.sendall(message.encode('utf-8'))
     client_socket.shutdown(socket.SHUT_WR)
+    buf_size = 4096
     http_msg = ''
     msg_comp = False
     while not msg_comp:
-        msg_part = client_socket.recv(128)
+        msg_part = client_socket.recv(buf_size)
         http_msg += msg_part
-        if len(msg_part) < 128:
+        if len(msg_part) < buf_size:
             msg_comp = True
     client_socket.close()
     return unicode(http_msg, 'utf-8')
+
+
+def http_client(uri):
+    """
+    Build a valid request for a specific resource
+    """
+    request = \
+        "GET " + uri + "HTTP/1.1 200\r\n" + \
+        "Host: 127.0.0.1:50000\r\n" + \
+        "\r\n"
+    return http_client_send_unaltered(request)
 
 
 if __name__ == "__main__":
