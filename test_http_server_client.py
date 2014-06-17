@@ -79,3 +79,6 @@ def test_http_client_error():
     print response
     print error_str
     assert response == error_str
+
+def test_shutdown_server():
+    http_client("secretstopmessage")

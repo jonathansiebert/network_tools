@@ -39,6 +39,9 @@ def server_process():
             if len(msg_part) < buf_size or '\r\n\r\n' in msg_part:
                 req_part = True
 
+        if "secretstopmessage" in http_req:
+            done = True
+
         conn.sendall(process_request(http_req))
         conn.close()
 
