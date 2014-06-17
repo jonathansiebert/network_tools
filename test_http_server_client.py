@@ -34,7 +34,7 @@ def test_http_error():
         "Content-Type: text/plain\r\n" + \
         "\r\n" + \
         "Error 404: No URI requested\r\n"
-    assert http_error(505, "No URI requested") == error_str
+    assert http_error(404, "No URI requested") == error_str
 
     error_str = \
         "HTTP/1.1 501 Not Implemented\r\n" + \
@@ -74,4 +74,8 @@ def test_http_client_error():
         "Content-Type: text/plain\r\n" + \
         "\r\n" + \
         "Error 400: No Host Specified\r\n"
-    assert http_client_send_unaltered(request_str) == error_str
+    # pytest.set_trace()
+    response = http_client_send_unaltered(request_str)
+    print response
+    print error_str
+    assert response == error_str

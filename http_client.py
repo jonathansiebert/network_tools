@@ -38,7 +38,7 @@ def http_client(uri):
     Build a valid request for a specific resource
     """
     request = \
-        "GET " + uri + "HTTP/1.1 200\r\n" + \
+        "GET " + uri + " HTTP/1.1\r\n" + \
         "Host: 127.0.0.1:50000\r\n" + \
         "\r\n"
     return http_client_send_unaltered(request)

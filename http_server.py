@@ -39,14 +39,26 @@ def server_process():
             if len(msg_part) < buf_size or '\r\n\r\n' in msg_part:
                 req_part = True
 
-        request = http_req.split()
-
-        
-
-        conn.sendall(http_req)
+        conn.sendall(process_request(http_req))
         conn.close()
 
     server_socket.close()
+
+
+def process_request(request):
+    """
+    parse a http GET request, returning appropriate error pages
+    when necessary, and returning a 200 page with the uri that
+    the user requested as the body otherwise
+    """
+    req = request.split()
+    if req[0] != "GET":
+        return http_error(501, "Server supports only GET requests")
+    if req[2] != "HTTP/1.1":
+        return http_error(505, "Server accepts only HTTP/1.1 requests")
+    if len(req) < 4 or req[3] != "Host:" or len(req) < 5:
+        return http_error(400, "No Host Specified")
+    return http_ok(req[1])
 
 
 def http_server():
@@ -86,10 +98,10 @@ def http_error(code, message):
     returns a http error response appropriate for the http error code
     with a human readable message in the response body
     """
-    return "HTTP/1.1 " + code + http_errors[code] + "\r\n"\
+    return "HTTP/1.1 " + str(code) + " " + http_errors[code] + "\r\n"\
            "Content-Type: text/plain\r\n" + \
            "\r\n" + \
-           "Error" + code + ": " + message + "\r\n"
+           "Error " + str(code) + ": " + message + "\r\n"
 
 
 if __name__ == "__main__":
